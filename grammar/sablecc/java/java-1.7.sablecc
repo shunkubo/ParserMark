@@ -1811,4 +1811,3 @@ Productions
 
   constant_expression_no_name =
     expression_no_name;
-
