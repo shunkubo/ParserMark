@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <string.h>
+#include "dparse.h"
+extern D_ParserTables parser_tables_gram;
+int
+main(int argc, char *argv[]) {
+  char s[256], *ss;
+  D_Parser *p = new_D_Parser(&parser_tables_gram, 0);
+
+  /* file -> char[] */
+
+  if (dparse(p, s, strlen(s)) && !p->syntax_errors)
+    printf("success\n");
+  else
+    printf("failure\n");
+}
