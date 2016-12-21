@@ -1,0 +1,221 @@
+Package org.epsilon;
+
+Helpers
+unicode_input_character = [0..0xffff];
+ht  = 0x0009;
+lf  = 0x000a;
+ff  = 0x000c;
+cr  = 0x000d;
+sp  = ' ';
+
+not_star = [unicode_input_character - '*'];
+not_star_not_slash = [unicode_input_character - ['*' + '/']];
+
+java_letter = ['a'..'z']| ['A'..'Z'] | '$' | '_';
+java_letter_or_digit = ['a'..'z']| ['A'..'Z'] | ['0'..'9'] | '$' | '_';
+
+line_terminator = lf | cr | cr lf;
+input_character = [unicode_input_character - [cr + lf]];
+
+white_space = (sp | ht | ff | line_terminator);
+
+traditional_comment = '/*' not_star* ('*' (not_star_not_slash not_star*)?)* '*/';
+
+end_of_line_comment = '//' input_character* line_terminator?;
+
+underscores = '_'+;
+
+non_zero_digit = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+digit = '0' | non_zero_digit;
+digit_or_underscore = digit | '_';
+digits_and_underscores = digit_or_underscore+;
+digits = digit | digit digits_and_underscores? digit;
+decimal_numeral = '0' | non_zero_digit digits? | non_zero_digit underscores digits;
+
+integer_type_suffix = 'l' | 'L';
+
+decimal_integer_literal = decimal_numeral integer_type_suffix?;
+
+single_character = [input_character - [''' + '\']];
+escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
+string_character = [input_character - ['"' + '\']] | escape_sequence;
+
+
+
+Tokens
+
+comment = traditional_comment | end_of_line_comment;
+white_spaces = white_space+ ;
+
+boolean = 'boolean';
+colon  = 'colon';
+else   = 'else';
+else_c    = 'else_c';
+else1     = 'else1';
+else2     = 'else2';
+else3     = 'else3';
+else4     = 'else4';
+else5     = 'else5';
+else6     = 'else6';
+else7     = 'else7';
+else8     = 'else8';
+else9     = 'else9';
+else_a     = 'elseA';
+else_b     = 'elseB';
+function = 'function';
+if    ='if';
+int    = 'int';
+long   = 'long';
+var   = 'var';
+question = '?';
+return = 'return';
+
+period = '.';
+comma = ',';
+semi  = ';';
+ex    = '!';
+dot   = '...';
+left_paren = '(';
+right_paren = ')';
+left_braces = '{';
+right_braces = '}';
+assign  = '=' ;
+star_assign = '*=';
+slash_assign = '/=';
+percent_assign = '%=';
+plus_assign = '+=';
+minus_assign = '-=';
+sh_left = '<<=';
+sh_right = '>>=';
+u_sh = '>>>=';
+and_assign = '&=';
+caret_assign ='^=';
+bar_assign = '|=';
+bar_bar = '||';
+amp_amp = '&&';
+equal   = '==';
+n_equal = '!=';
+less_than = '<';
+greater_than = '>';
+less_than_eq = '<=';
+greater_than_eq = '>=';
+colon_colon = '::';
+
+integer_literal = decimal_integer_literal;
+boolean_literal = 'true' | 'false';
+character_literal = ''' single_character ''' | ''' escape_sequence ''';
+string_literal = '"' string_character* '"';
+null_literal = 'null';
+
+identifier = java_letter java_letter_or_digit*;
+
+
+Ignored Tokens
+white_spaces, comment;
+
+
+Productions
+file = top_level+ ;
+top_level = block semi ;
+declaration = //{function} function_declaration
+             {var} variable_declaration
+            ;
+
+function_declaration = [function]:function identifier [r2]:left_paren [param_list]:param_list_option? [r1]:right_paren [b1]:block ;
+function_param_list  = param_list_option? ;
+param_list_option    = [function_param]:function_param function_param_repeat* ;
+function_param_repeat = [comma]:comma [function_param]:function_param ;
+function_param       = identifier ;
+
+variable_declaration = var variable_list semi ;
+variable_list        = init_decl init_decl_repeat* ;
+init_decl_repeat     = comma init_decl ;
+init_decl            = identifier initial_option? ;
+initial_option       = assign initializer ;
+initializer          = assignment_expression ;
+
+block     = left_braces block_alter* right_braces ;
+block_alter = {statement} statement
+            | {declaration} declaration
+            ;
+
+statement = {block} block
+          | {if1} if left_paren expression right_paren [b1]:block else1 [b2]:block
+          | {if2} if left_paren expression right_paren [b1]:block else2 [b2]:block
+          | {if3} if left_paren expression right_paren [b1]:block else3 [b2]:block
+          | {if4} if left_paren expression right_paren [b1]:block else4 [b2]:block
+          | {if5} if left_paren expression right_paren [b1]:block else5 [b2]:block
+          | {if6} if left_paren expression right_paren [b1]:block else6 [b2]:block
+          | {if7} if left_paren expression right_paren [b1]:block else7 [b2]:block
+          | {if8} if left_paren expression right_paren [b1]:block else8 [b2]:block
+          | {if9} if left_paren expression right_paren [b1]:block else9 [b2]:block
+          | {ifa} if left_paren expression right_paren [b1]:block else_a [b2]:block
+          | {ifb} if left_paren expression right_paren [b1]:block else_b [b2]:block
+          | {ifc} if left_paren expression right_paren [b1]:block else_c [b2]:block
+          | {if} if left_paren expression right_paren [b1]:block else_option?
+          | {return} return expression? semi
+          | {expression} expression semi
+          ;
+else_option = else block ;
+
+expression            = assignment_expression assignment_ex_repeat* ;
+assignment_ex_repeat  = comma assignment_expression ;
+assignment_expression = {unary} unary_assignment
+                        | {conditional} conditional_expression
+                        ;
+unary_assignment      = unary_expression assignment_operator assignment_expression;
+
+assignment_operator   = {assign} assign
+                       | {star} star_assign
+                       | {slash} slash_assign
+                       | {percent} percent_assign
+                       | {plus} plus_assign
+                       | {minus} minus_assign
+                       | {shl} sh_left
+                       | {shr} sh_right
+                       | {ush} u_sh
+                       | {and} and_assign
+                       | {caret} caret_assign
+                       | {bar} bar_assign
+                       ;
+
+conditional_expression   = logical_or_expression ex_logical_repeat* ;
+ex_logical_repeat        = question expression colon logical_or_expression ;
+logical_or_expression    = logical_and_expression logical_and_repeat* ;
+logical_and_repeat       = bar_bar logical_and_expression ;
+logical_and_expression   = equality_expression equality_ex_repeat* ;
+equality_ex_repeat       = amp_amp equality_expression ;
+equality_expression      = relational_expression relational_repeat* ;
+relational_repeat        = equal_or_n_equal relational_repeat;
+equal_or_n_equal         = {equal} equal
+                          | {notequal} n_equal
+                          ;
+relational_expression    = unary_expression unary_expression_repeat* ;
+unary_expression_repeat  = inequality unary_expression ;
+inequality               = {less} less_than
+                         | {lesseq} less_than_eq
+                         | {greater} greater_than
+                         | {greatereq} greater_than_eq
+                         ;
+unary_expression         = {postfix} postfix_expression
+                         | {unary} ex unary_expression ;
+postfix_expression       = {function} function_call
+                         | {primary} primary_expression
+                         ;
+function_call            = primary_expression function_plus+ ;
+function_plus            = left_paren argument_expression_list? right_paren ;
+argument_expression_list = assignment_expression argument_expression_list_repeat* ;
+argument_expression_list_repeat = comma assignment_expression;
+primary_expression       = {constant} constant
+                         | {expression} left_paren expression right_paren
+                         | {function} function_expression
+                         | {identifier} identifier
+                         ;
+function_expression      = function identifier? left_paren function_param_list right_paren block colon_colon ;
+
+constant = {integer} integer_literal
+        | {boolean} boolean_literal
+        | {character} character_literal
+        | {string} string_literal
+        | {null} null_literal
+        ;
