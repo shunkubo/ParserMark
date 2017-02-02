@@ -3,11 +3,11 @@
   Available at http://dparser.sf.net
 */
 
-#line 1 "./epsilon.g"
+#line 1 "epsilon.g"
 
 #include "d.h"
 
-#line 11 "./epsilon.g.d_parser.c"
+#line 11 "epsilon.g.d_parser.c"
 #include "dparse.h"
 
 D_Reduction d_reduction_0_gram = {1, 0, NULL, NULL, 0, 0, 0, 0, -1, 0, NULL};
