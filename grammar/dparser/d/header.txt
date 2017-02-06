@@ -1,0 +1,27 @@
+{
+#include "d.h"
+}
+
+file: top_level+ ;
+top_level
+    : declaration
+    | ';'
+    ;
+identifier: "[a-zA-Z_][a-zA-Z_0-9_$]*" ;
+
+
+declaration
+ : function_declaration
+ | variable_declaration
+ ;
+function_declaration : 'function' identifier '(' function_param_list ')' block ;
+function_param_list : (function_param (',' function_param)*)? ;
+function_param : identifier? ;
+
+variable_declaration : 'var' variable_list ';';
+variable_list : init_decl (',' init_decl)* ;
+init_decl : identifier ('=' assignment_expression)? ;
+
+block : '{' ( statement | declaration )*'}' ;
+statement
+ : block
