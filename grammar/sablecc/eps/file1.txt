@@ -1,0 +1,52 @@
+Package epsilon;
+
+Helpers
+unicode_input_character = [0..0xffff];
+ht  = 0x0009;
+lf  = 0x000a;
+ff  = 0x000c;
+cr  = 0x000d;
+sp  = ' ';
+
+not_star = [unicode_input_character - '*'];
+not_star_not_slash = [unicode_input_character - ['*' + '/']];
+
+java_letter = ['a'..'z']| ['A'..'Z'] | '$' | '_';
+java_letter_or_digit = ['a'..'z']| ['A'..'Z'] | ['0'..'9'] | '$' | '_';
+
+line_terminator = lf | cr | cr lf;
+input_character = [unicode_input_character - [cr + lf]];
+
+white_space = (sp | ht | ff | line_terminator);
+
+traditional_comment = '/*' not_star* ('*' (not_star_not_slash not_star*)?)* '*/';
+
+end_of_line_comment = '//' input_character* line_terminator?;
+
+underscores = '_'+;
+
+non_zero_digit = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+digit = '0' | non_zero_digit;
+digit_or_underscore = digit | '_';
+digits_and_underscores = digit_or_underscore+;
+digits = digit | digit digits_and_underscores? digit;
+decimal_numeral = '0' | non_zero_digit digits? | non_zero_digit underscores digits;
+
+integer_type_suffix = 'l' | 'L';
+
+decimal_integer_literal = decimal_numeral integer_type_suffix?;
+
+single_character = [input_character - [''' + '\']];
+escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
+string_character = [input_character - ['"' + '\']] | escape_sequence;
+
+
+
+Tokens
+
+comment = traditional_comment | end_of_line_comment;
+white_spaces = white_space+ ;
+
+boolean = 'boolean';
+colon  = 'colon';
+else   = 'else';

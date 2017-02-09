@@ -1,0 +1,80 @@
+function = 'function';
+if    ='if';
+int    = 'int';
+long   = 'long';
+var   = 'var';
+question = '?';
+return = 'return';
+
+period = '.';
+comma = ',';
+semi  = ';';
+ex    = '!';
+dot   = '...';
+left_paren = '(';
+right_paren = ')';
+left_braces = '{';
+right_braces = '}';
+assign  = '=' ;
+star_assign = '*=';
+slash_assign = '/=';
+percent_assign = '%=';
+plus_assign = '+=';
+minus_assign = '-=';
+sh_left = '<<=';
+sh_right = '>>=';
+u_sh = '>>>=';
+and_assign = '&=';
+caret_assign ='^=';
+bar_assign = '|=';
+bar_bar = '||';
+amp_amp = '&&';
+equal   = '==';
+n_equal = '!=';
+less_than = '<';
+greater_than = '>';
+less_than_eq = '<=';
+greater_than_eq = '>=';
+colon_colon = '::';
+
+integer_literal = decimal_integer_literal;
+boolean_literal = 'true' | 'false';
+character_literal = ''' single_character ''' | ''' escape_sequence ''';
+string_literal = '"' string_character* '"';
+null_literal = 'null';
+
+identifier = java_letter java_letter_or_digit*;
+
+
+Ignored Tokens
+white_spaces, comment;
+
+
+Productions
+file = top_level+ ;
+top_level = {statement}statement
+          | {declaration}declaration
+          ;
+declaration = {function} function_declaration
+              | {var} variable_declaration
+            ;
+
+function_declaration = {functiondecalaration}[function]:function identifier [r2]:left_paren [param_list]:param_list_option? [r1]:right_paren [b1]:block ;
+function_param_list  = param_list_option? ;
+param_list_option    = [function_param]:function_param function_param_repeat* ;
+function_param_repeat = [comma]:comma [function_param]:function_param ;
+function_param       = identifier ;
+
+variable_declaration = var variable_list semi ;
+variable_list        = init_decl init_decl_repeat* ;
+init_decl_repeat     = comma init_decl ;
+init_decl            = identifier initial_option? ;
+initial_option       = assign initializer ;
+initializer          = assignment_expression ;
+
+block     = left_braces block_alter* right_braces ;
+block_alter = {statement} statement
+            | {declaration} declaration
+            ;
+
+statement = {block} block

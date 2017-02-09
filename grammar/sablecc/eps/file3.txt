@@ -1,0 +1,67 @@
+| {if} if left_paren expression right_paren [b1]:block else_option?
+| {return} return expression? semi
+| {expression} expression semi
+;
+else_option = else block ;
+
+expression            = assignment_expression assignment_ex_repeat* ;
+assignment_ex_repeat  = comma assignment_expression ;
+assignment_expression = {unary} unary_assignment
+              | {conditional} conditional_expression
+              ;
+unary_assignment      = unary_expression assignment_operator assignment_expression;
+
+assignment_operator   = {assign} assign
+             | {star} star_assign
+             | {slash} slash_assign
+             | {percent} percent_assign
+             | {plus} plus_assign
+             | {minus} minus_assign
+             | {shl} sh_left
+             | {shr} sh_right
+             | {ush} u_sh
+             | {and} and_assign
+             | {caret} caret_assign
+             | {bar} bar_assign
+             ;
+
+conditional_expression   = logical_or_expression ex_logical_repeat* ;
+ex_logical_repeat        = question expression colon logical_or_expression ;
+logical_or_expression    = logical_and_expression logical_and_repeat* ;
+logical_and_repeat       = bar_bar logical_and_expression ;
+logical_and_expression   = equality_expression equality_ex_repeat* ;
+equality_ex_repeat       = amp_amp equality_expression ;
+equality_expression      = relational_expression relational_repeat* ;
+relational_repeat        = equal_or_n_equal relational_expression;
+equal_or_n_equal         = {equal} equal
+                | {notequal} n_equal
+                ;
+relational_expression    = unary_expression unary_expression_repeat* ;
+unary_expression_repeat  = inequality unary_expression ;
+inequality               = {less} less_than
+               | {lesseq} less_than_eq
+               | {greater} greater_than
+               | {greatereq} greater_than_eq
+               ;
+unary_expression         = {postfix} postfix_expression
+               | {unary} ex unary_expression ;
+postfix_expression       = {function} function_call
+               | {primary} primary_expression
+               ;
+function_call            = primary_expression function_plus+ ;
+function_plus            = left_paren argument_expression_list? right_paren ;
+argument_expression_list = assignment_expression argument_expression_list_repeat* ;
+argument_expression_list_repeat = comma assignment_expression;
+primary_expression       = {constant} constant
+               | {expression} left_paren expression right_paren
+               | {function} function_expression
+               | {identifier} identifier
+               ;
+function_expression      = function identifier? left_paren function_param_list right_paren block colon_colon ;
+
+constant = {integer} integer_literal
+| {boolean} boolean_literal
+| {character} character_literal
+| {string} string_literal
+| {null} null_literal
+;

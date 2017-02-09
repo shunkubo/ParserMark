@@ -1,0 +1,399 @@
+Package epsilon;
+
+Helpers
+unicode_input_character = [0..0xffff];
+ht  = 0x0009;
+lf  = 0x000a;
+ff  = 0x000c;
+cr  = 0x000d;
+sp  = ' ';
+
+not_star = [unicode_input_character - '*'];
+not_star_not_slash = [unicode_input_character - ['*' + '/']];
+
+java_letter = ['a'..'z']| ['A'..'Z'] | '$' | '_';
+java_letter_or_digit = ['a'..'z']| ['A'..'Z'] | ['0'..'9'] | '$' | '_';
+
+line_terminator = lf | cr | cr lf;
+input_character = [unicode_input_character - [cr + lf]];
+
+white_space = (sp | ht | ff | line_terminator);
+
+traditional_comment = '/*' not_star* ('*' (not_star_not_slash not_star*)?)* '*/';
+
+end_of_line_comment = '//' input_character* line_terminator?;
+
+underscores = '_'+;
+
+non_zero_digit = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+digit = '0' | non_zero_digit;
+digit_or_underscore = digit | '_';
+digits_and_underscores = digit_or_underscore+;
+digits = digit | digit digits_and_underscores? digit;
+decimal_numeral = '0' | non_zero_digit digits? | non_zero_digit underscores digits;
+
+integer_type_suffix = 'l' | 'L';
+
+decimal_integer_literal = decimal_numeral integer_type_suffix?;
+
+single_character = [input_character - [''' + '\']];
+escape_sequence = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
+string_character = [input_character - ['"' + '\']] | escape_sequence;
+
+
+
+Tokens
+
+comment = traditional_comment | end_of_line_comment;
+white_spaces = white_space+ ;
+
+boolean = 'boolean';
+colon  = 'colon';
+else   = 'else';
+else0 =  'else0'; 
+else1 =  'else1'; 
+else2 =  'else2'; 
+else3 =  'else3'; 
+else4 =  'else4'; 
+else5 =  'else5'; 
+else6 =  'else6'; 
+else7 =  'else7'; 
+else8 =  'else8'; 
+else9 =  'else9'; 
+else10 =  'else10'; 
+else11 =  'else11'; 
+else12 =  'else12'; 
+else13 =  'else13'; 
+else14 =  'else14'; 
+else15 =  'else15'; 
+else16 =  'else16'; 
+else17 =  'else17'; 
+else18 =  'else18'; 
+else19 =  'else19'; 
+else20 =  'else20'; 
+else21 =  'else21'; 
+else22 =  'else22'; 
+else23 =  'else23'; 
+else24 =  'else24'; 
+else25 =  'else25'; 
+else26 =  'else26'; 
+else27 =  'else27'; 
+else28 =  'else28'; 
+else29 =  'else29'; 
+else30 =  'else30'; 
+else31 =  'else31'; 
+else32 =  'else32'; 
+else33 =  'else33'; 
+else34 =  'else34'; 
+else35 =  'else35'; 
+else36 =  'else36'; 
+else37 =  'else37'; 
+else38 =  'else38'; 
+else39 =  'else39'; 
+else40 =  'else40'; 
+else41 =  'else41'; 
+else42 =  'else42'; 
+else43 =  'else43'; 
+else44 =  'else44'; 
+else45 =  'else45'; 
+else46 =  'else46'; 
+else47 =  'else47'; 
+else48 =  'else48'; 
+else49 =  'else49'; 
+else50 =  'else50'; 
+else51 =  'else51'; 
+else52 =  'else52'; 
+else53 =  'else53'; 
+else54 =  'else54'; 
+else55 =  'else55'; 
+else56 =  'else56'; 
+else57 =  'else57'; 
+else58 =  'else58'; 
+else59 =  'else59'; 
+else60 =  'else60'; 
+else61 =  'else61'; 
+else62 =  'else62'; 
+else63 =  'else63'; 
+else64 =  'else64'; 
+else65 =  'else65'; 
+else66 =  'else66'; 
+else67 =  'else67'; 
+else68 =  'else68'; 
+else69 =  'else69'; 
+else70 =  'else70'; 
+else71 =  'else71'; 
+else72 =  'else72'; 
+else73 =  'else73'; 
+else74 =  'else74'; 
+else75 =  'else75'; 
+else76 =  'else76'; 
+else77 =  'else77'; 
+else78 =  'else78'; 
+else79 =  'else79'; 
+else80 =  'else80'; 
+else81 =  'else81'; 
+else82 =  'else82'; 
+else83 =  'else83'; 
+else84 =  'else84'; 
+else85 =  'else85'; 
+else86 =  'else86'; 
+else87 =  'else87'; 
+else88 =  'else88'; 
+else89 =  'else89'; 
+else90 =  'else90'; 
+else91 =  'else91'; 
+else92 =  'else92'; 
+else93 =  'else93'; 
+else94 =  'else94'; 
+else95 =  'else95'; 
+else96 =  'else96'; 
+else97 =  'else97'; 
+else98 =  'else98'; 
+else99 =  'else99'; 
+function = 'function';
+if    ='if';
+int    = 'int';
+long   = 'long';
+var   = 'var';
+question = '?';
+return = 'return';
+
+period = '.';
+comma = ',';
+semi  = ';';
+ex    = '!';
+dot   = '...';
+left_paren = '(';
+right_paren = ')';
+left_braces = '{';
+right_braces = '}';
+assign  = '=' ;
+star_assign = '*=';
+slash_assign = '/=';
+percent_assign = '%=';
+plus_assign = '+=';
+minus_assign = '-=';
+sh_left = '<<=';
+sh_right = '>>=';
+u_sh = '>>>=';
+and_assign = '&=';
+caret_assign ='^=';
+bar_assign = '|=';
+bar_bar = '||';
+amp_amp = '&&';
+equal   = '==';
+n_equal = '!=';
+less_than = '<';
+greater_than = '>';
+less_than_eq = '<=';
+greater_than_eq = '>=';
+colon_colon = '::';
+
+integer_literal = decimal_integer_literal;
+boolean_literal = 'true' | 'false';
+character_literal = ''' single_character ''' | ''' escape_sequence ''';
+string_literal = '"' string_character* '"';
+null_literal = 'null';
+
+identifier = java_letter java_letter_or_digit*;
+
+
+Ignored Tokens
+white_spaces, comment;
+
+
+Productions
+file = top_level+ ;
+top_level = {statement}statement
+          | {declaration}declaration
+          ;
+declaration = {function} function_declaration
+              | {var} variable_declaration
+            ;
+
+function_declaration = {functiondecalaration}[function]:function identifier [r2]:left_paren [param_list]:param_list_option? [r1]:right_paren [b1]:block ;
+function_param_list  = param_list_option? ;
+param_list_option    = [function_param]:function_param function_param_repeat* ;
+function_param_repeat = [comma]:comma [function_param]:function_param ;
+function_param       = identifier ;
+
+variable_declaration = var variable_list semi ;
+variable_list        = init_decl init_decl_repeat* ;
+init_decl_repeat     = comma init_decl ;
+init_decl            = identifier initial_option? ;
+initial_option       = assign initializer ;
+initializer          = assignment_expression ;
+
+block     = left_braces block_alter* right_braces ;
+block_alter = {statement} statement
+            | {declaration} declaration
+            ;
+
+statement = {block} block
+| {if0} if left_paren expression right_paren [b1]:block 'else0'[b2]:block 
+| {if1} if left_paren expression right_paren [b1]:block 'else1'[b2]:block 
+| {if2} if left_paren expression right_paren [b1]:block 'else2'[b2]:block 
+| {if3} if left_paren expression right_paren [b1]:block 'else3'[b2]:block 
+| {if4} if left_paren expression right_paren [b1]:block 'else4'[b2]:block 
+| {if5} if left_paren expression right_paren [b1]:block 'else5'[b2]:block 
+| {if6} if left_paren expression right_paren [b1]:block 'else6'[b2]:block 
+| {if7} if left_paren expression right_paren [b1]:block 'else7'[b2]:block 
+| {if8} if left_paren expression right_paren [b1]:block 'else8'[b2]:block 
+| {if9} if left_paren expression right_paren [b1]:block 'else9'[b2]:block 
+| {if10} if left_paren expression right_paren [b1]:block 'else10'[b2]:block 
+| {if11} if left_paren expression right_paren [b1]:block 'else11'[b2]:block 
+| {if12} if left_paren expression right_paren [b1]:block 'else12'[b2]:block 
+| {if13} if left_paren expression right_paren [b1]:block 'else13'[b2]:block 
+| {if14} if left_paren expression right_paren [b1]:block 'else14'[b2]:block 
+| {if15} if left_paren expression right_paren [b1]:block 'else15'[b2]:block 
+| {if16} if left_paren expression right_paren [b1]:block 'else16'[b2]:block 
+| {if17} if left_paren expression right_paren [b1]:block 'else17'[b2]:block 
+| {if18} if left_paren expression right_paren [b1]:block 'else18'[b2]:block 
+| {if19} if left_paren expression right_paren [b1]:block 'else19'[b2]:block 
+| {if20} if left_paren expression right_paren [b1]:block 'else20'[b2]:block 
+| {if21} if left_paren expression right_paren [b1]:block 'else21'[b2]:block 
+| {if22} if left_paren expression right_paren [b1]:block 'else22'[b2]:block 
+| {if23} if left_paren expression right_paren [b1]:block 'else23'[b2]:block 
+| {if24} if left_paren expression right_paren [b1]:block 'else24'[b2]:block 
+| {if25} if left_paren expression right_paren [b1]:block 'else25'[b2]:block 
+| {if26} if left_paren expression right_paren [b1]:block 'else26'[b2]:block 
+| {if27} if left_paren expression right_paren [b1]:block 'else27'[b2]:block 
+| {if28} if left_paren expression right_paren [b1]:block 'else28'[b2]:block 
+| {if29} if left_paren expression right_paren [b1]:block 'else29'[b2]:block 
+| {if30} if left_paren expression right_paren [b1]:block 'else30'[b2]:block 
+| {if31} if left_paren expression right_paren [b1]:block 'else31'[b2]:block 
+| {if32} if left_paren expression right_paren [b1]:block 'else32'[b2]:block 
+| {if33} if left_paren expression right_paren [b1]:block 'else33'[b2]:block 
+| {if34} if left_paren expression right_paren [b1]:block 'else34'[b2]:block 
+| {if35} if left_paren expression right_paren [b1]:block 'else35'[b2]:block 
+| {if36} if left_paren expression right_paren [b1]:block 'else36'[b2]:block 
+| {if37} if left_paren expression right_paren [b1]:block 'else37'[b2]:block 
+| {if38} if left_paren expression right_paren [b1]:block 'else38'[b2]:block 
+| {if39} if left_paren expression right_paren [b1]:block 'else39'[b2]:block 
+| {if40} if left_paren expression right_paren [b1]:block 'else40'[b2]:block 
+| {if41} if left_paren expression right_paren [b1]:block 'else41'[b2]:block 
+| {if42} if left_paren expression right_paren [b1]:block 'else42'[b2]:block 
+| {if43} if left_paren expression right_paren [b1]:block 'else43'[b2]:block 
+| {if44} if left_paren expression right_paren [b1]:block 'else44'[b2]:block 
+| {if45} if left_paren expression right_paren [b1]:block 'else45'[b2]:block 
+| {if46} if left_paren expression right_paren [b1]:block 'else46'[b2]:block 
+| {if47} if left_paren expression right_paren [b1]:block 'else47'[b2]:block 
+| {if48} if left_paren expression right_paren [b1]:block 'else48'[b2]:block 
+| {if49} if left_paren expression right_paren [b1]:block 'else49'[b2]:block 
+| {if50} if left_paren expression right_paren [b1]:block 'else50'[b2]:block 
+| {if51} if left_paren expression right_paren [b1]:block 'else51'[b2]:block 
+| {if52} if left_paren expression right_paren [b1]:block 'else52'[b2]:block 
+| {if53} if left_paren expression right_paren [b1]:block 'else53'[b2]:block 
+| {if54} if left_paren expression right_paren [b1]:block 'else54'[b2]:block 
+| {if55} if left_paren expression right_paren [b1]:block 'else55'[b2]:block 
+| {if56} if left_paren expression right_paren [b1]:block 'else56'[b2]:block 
+| {if57} if left_paren expression right_paren [b1]:block 'else57'[b2]:block 
+| {if58} if left_paren expression right_paren [b1]:block 'else58'[b2]:block 
+| {if59} if left_paren expression right_paren [b1]:block 'else59'[b2]:block 
+| {if60} if left_paren expression right_paren [b1]:block 'else60'[b2]:block 
+| {if61} if left_paren expression right_paren [b1]:block 'else61'[b2]:block 
+| {if62} if left_paren expression right_paren [b1]:block 'else62'[b2]:block 
+| {if63} if left_paren expression right_paren [b1]:block 'else63'[b2]:block 
+| {if64} if left_paren expression right_paren [b1]:block 'else64'[b2]:block 
+| {if65} if left_paren expression right_paren [b1]:block 'else65'[b2]:block 
+| {if66} if left_paren expression right_paren [b1]:block 'else66'[b2]:block 
+| {if67} if left_paren expression right_paren [b1]:block 'else67'[b2]:block 
+| {if68} if left_paren expression right_paren [b1]:block 'else68'[b2]:block 
+| {if69} if left_paren expression right_paren [b1]:block 'else69'[b2]:block 
+| {if70} if left_paren expression right_paren [b1]:block 'else70'[b2]:block 
+| {if71} if left_paren expression right_paren [b1]:block 'else71'[b2]:block 
+| {if72} if left_paren expression right_paren [b1]:block 'else72'[b2]:block 
+| {if73} if left_paren expression right_paren [b1]:block 'else73'[b2]:block 
+| {if74} if left_paren expression right_paren [b1]:block 'else74'[b2]:block 
+| {if75} if left_paren expression right_paren [b1]:block 'else75'[b2]:block 
+| {if76} if left_paren expression right_paren [b1]:block 'else76'[b2]:block 
+| {if77} if left_paren expression right_paren [b1]:block 'else77'[b2]:block 
+| {if78} if left_paren expression right_paren [b1]:block 'else78'[b2]:block 
+| {if79} if left_paren expression right_paren [b1]:block 'else79'[b2]:block 
+| {if80} if left_paren expression right_paren [b1]:block 'else80'[b2]:block 
+| {if81} if left_paren expression right_paren [b1]:block 'else81'[b2]:block 
+| {if82} if left_paren expression right_paren [b1]:block 'else82'[b2]:block 
+| {if83} if left_paren expression right_paren [b1]:block 'else83'[b2]:block 
+| {if84} if left_paren expression right_paren [b1]:block 'else84'[b2]:block 
+| {if85} if left_paren expression right_paren [b1]:block 'else85'[b2]:block 
+| {if86} if left_paren expression right_paren [b1]:block 'else86'[b2]:block 
+| {if87} if left_paren expression right_paren [b1]:block 'else87'[b2]:block 
+| {if88} if left_paren expression right_paren [b1]:block 'else88'[b2]:block 
+| {if89} if left_paren expression right_paren [b1]:block 'else89'[b2]:block 
+| {if90} if left_paren expression right_paren [b1]:block 'else90'[b2]:block 
+| {if91} if left_paren expression right_paren [b1]:block 'else91'[b2]:block 
+| {if92} if left_paren expression right_paren [b1]:block 'else92'[b2]:block 
+| {if93} if left_paren expression right_paren [b1]:block 'else93'[b2]:block 
+| {if94} if left_paren expression right_paren [b1]:block 'else94'[b2]:block 
+| {if95} if left_paren expression right_paren [b1]:block 'else95'[b2]:block 
+| {if96} if left_paren expression right_paren [b1]:block 'else96'[b2]:block 
+| {if97} if left_paren expression right_paren [b1]:block 'else97'[b2]:block 
+| {if98} if left_paren expression right_paren [b1]:block 'else98'[b2]:block 
+| {if99} if left_paren expression right_paren [b1]:block 'else99'[b2]:block 
+| {if} if left_paren expression right_paren [b1]:block else_option?
+| {return} return expression? semi
+| {expression} expression semi
+;
+else_option = else block ;
+
+expression            = assignment_expression assignment_ex_repeat* ;
+assignment_ex_repeat  = comma assignment_expression ;
+assignment_expression = {unary} unary_assignment
+              | {conditional} conditional_expression
+              ;
+unary_assignment      = unary_expression assignment_operator assignment_expression;
+
+assignment_operator   = {assign} assign
+             | {star} star_assign
+             | {slash} slash_assign
+             | {percent} percent_assign
+             | {plus} plus_assign
+             | {minus} minus_assign
+             | {shl} sh_left
+             | {shr} sh_right
+             | {ush} u_sh
+             | {and} and_assign
+             | {caret} caret_assign
+             | {bar} bar_assign
+             ;
+
+conditional_expression   = logical_or_expression ex_logical_repeat* ;
+ex_logical_repeat        = question expression colon logical_or_expression ;
+logical_or_expression    = logical_and_expression logical_and_repeat* ;
+logical_and_repeat       = bar_bar logical_and_expression ;
+logical_and_expression   = equality_expression equality_ex_repeat* ;
+equality_ex_repeat       = amp_amp equality_expression ;
+equality_expression      = relational_expression relational_repeat* ;
+relational_repeat        = equal_or_n_equal relational_expression;
+equal_or_n_equal         = {equal} equal
+                | {notequal} n_equal
+                ;
+relational_expression    = unary_expression unary_expression_repeat* ;
+unary_expression_repeat  = inequality unary_expression ;
+inequality               = {less} less_than
+               | {lesseq} less_than_eq
+               | {greater} greater_than
+               | {greatereq} greater_than_eq
+               ;
+unary_expression         = {postfix} postfix_expression
+               | {unary} ex unary_expression ;
+postfix_expression       = {function} function_call
+               | {primary} primary_expression
+               ;
+function_call            = primary_expression function_plus+ ;
+function_plus            = left_paren argument_expression_list? right_paren ;
+argument_expression_list = assignment_expression argument_expression_list_repeat* ;
+argument_expression_list_repeat = comma assignment_expression;
+primary_expression       = {constant} constant
+               | {expression} left_paren expression right_paren
+               | {function} function_expression
+               | {identifier} identifier
+               ;
+function_expression      = function identifier? left_paren function_param_list right_paren block colon_colon ;
+
+constant = {integer} integer_literal
+| {boolean} boolean_literal
+| {character} character_literal
+| {string} string_literal
+| {null} null_literal
+;
