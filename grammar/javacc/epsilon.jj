@@ -149,23 +149,22 @@ TOKEN :
 {
   < BOOLEAN: "boolean" >
 | < ELSE: "else" >
+| < ELSEA: "elseA">
 | < FOR: "for" >
 | < FALSE: "false" >
 | < FUNCTION: "function">
 | < VAR: "var">
-|< ELSE1: "else1">
-|< ELSE2: "else2">
-|< ELSE3: "else3">
-|< ELSE4: "else4">
-|< ELSE5: "else5">
-|< ELSE6: "else6">
-|< ELSE7: "else7">
-|< ELSE8: "else8">
-|< ELSE9: "else9">
-|< ELSEA: "elseA">
-|< ELSEB: "elseB">
-|< ELSEC: "elseC">
-|< IF: "if">
+| <ELSE0: "else0">
+| <ELSE1: "else1">
+| <ELSE2: "else2">
+| <ELSE3: "else3">
+| <ELSE4: "else4">
+| <ELSE5: "else5">
+| <ELSE6: "else6">
+| <ELSE7: "else7">
+| <ELSE8: "else8">
+| <ELSE9: "else9">
+| < IF: "if">
 | < INT: "int" >
 | < LONG: "long" >
 | < NULL: "null" >
@@ -286,39 +285,38 @@ void Block():
 
 void Statement():
 {}
-{
-  Block()
-//  | "if" "(" Expression() ")" Block() "else1" Block()
-//  | "if" "(" Expression() ")" Block() "else2" Block()
-//  | "if" "(" Expression() ")" Block() "else3" Block()
-//  | "if" "(" Expression() ")" Block() "else4" Block()
-//  | "if" "(" Expression() ")" Block() "else5" Block()
-//  | "if" "(" Expression() ")" Block() "else6" Block()
-//  | "if" "(" Expression() ")" Block() "else7" Block()
-//  | "if" "(" Expression() ")" Block() "else8" Block()
-//  | "if" "(" Expression() ")" Block() "else9" Block()
-//  | "if" "(" Expression() ")" Block() "elseA" Block()
-//  | "if" "(" Expression() ")" Block() "elseB" Block()
-//  | "if" "(" Expression() ")" Block() "elseC" Block()
-  | "if" "(" Expression() ")" Block() ("else" Block())?
-  | "return" (Expression())? ";"
-  | Expression() ";"
-  //| LOOKAHEAD(FunctionExpression()) FunctionExpression() (FunctionCallPlus())* ";"
-   }
+{  Block()
+ | "if" "(" Expression() ")" Block()(
+   "elseA" Block()
+  | "else0" Block()  
+  | "else1" Block()  
+  | "else2" Block()  
+  | "else3" Block()  
+  | "else4" Block()  
+  | "else5" Block()  
+  | "else6" Block()  
+  | "else7" Block()  
+  | "else8" Block()  
+  | "else9" Block()  
+  | ("else" Block())? )
+| "return" (Expression())? ";"
+| Expression() ";"
+//| LOOKAHEAD(FunctionExpression()) FunctionExpression() (FunctionCallPlus())* ";"
+ }
 
 
 /*expression*/
 void Expression():
 {}
 {
- AssignmentExpression() ("," AssignmentExpression())*
+AssignmentExpression() ("," AssignmentExpression())*
 }
 
 void AssignmentExpression():
 {}
 {
- ConditionalExpression()
- [ LOOKAHEAD(2) AssignmentOperator() AssignmentExpression() ]
+ConditionalExpression()
+[ LOOKAHEAD(2) AssignmentOperator() AssignmentExpression() ]
 //   UnaryExpression()  AssignmentOperator()  AssignmentExpression()
 // | ConditionalExpression()
 }
@@ -326,124 +324,124 @@ void AssignmentExpression():
 void AssignmentOperator():
 {}
 {
-  "="|"*="|"/="|"%="|"+="|"-="|"<<="|">>="|">>>="|"&="|"^="|"|="
+"="|"*="|"/="|"%="|"+="|"-="|"<<="|">>="|">>>="|"&="|"^="|"|="
 }
 void ConditionalExpression():
 {}
 {
-  LogicalOrExpression() ("?" Expression() ":" LogicalOrExpression() )*
+LogicalOrExpression() ("?" Expression() ":" LogicalOrExpression() )*
 }
 
 void LogicalOrExpression():
 {}
 {
- LogicalAndExpression() ("||" LogicalAndExpression())*
+LogicalAndExpression() ("||" LogicalAndExpression())*
 }
 
 void LogicalAndExpression():
 {}
 {
- EqualityExpression() ("&&" EqualityExpression())*
+EqualityExpression() ("&&" EqualityExpression())*
 }
 
 void EqualityExpression():
 {}
 {
- RelationalExpression() (("=="|"!=") RelationalExpression())*
+RelationalExpression() (("=="|"!=") RelationalExpression())*
 }
 
 void RelationalExpression():
 {}
 {
- UnaryExpression() (("<"|"<="|">"|">=") UnaryExpression())*
+UnaryExpression() (("<"|"<="|">"|">=") UnaryExpression())*
 }
 
 void UnaryExpression():
 {}
 {
- PostfixExpression()
- |"!" UnaryExpression()
+PostfixExpression()
+|"!" UnaryExpression()
 }
 
 void PostfixExpression():
 {}
 { LOOKAHEAD(3)
- FunctionCall()
- | PrimaryExpression()
+FunctionCall()
+| PrimaryExpression()
 }
 
 void FunctionCall():
 {}
 {
- PrimaryExpression() (FunctionCallPlus())*
+PrimaryExpression() (FunctionCallPlus())*
 }
 
 void FunctionCallPlus():
 {}
 {
- "(" (ArgumentExpressionList())? ")"
+"(" (ArgumentExpressionList())? ")"
 }
 
 void ArgumentExpressionList():
 {}
 {
- AssignmentExpression() ("," AssignmentExpression())*
+AssignmentExpression() ("," AssignmentExpression())*
 
 }
 
 void PrimaryExpression():
 {}
 {  LOOKAHEAD(2)
-  Constant()
- | "(" Expression() ")"
- //| FunctionExpression()
- | ExpressionName()
+Constant()
+| "(" Expression() ")"
+//| FunctionExpression()
+| ExpressionName()
 
 }
 
 void FunctionExpression():
 {}
 {
-  "function" (<NAME>)? "(" (FunctionParamList())? ")" Block() "::"
+"function" (<NAME>)? "(" (FunctionParamList())? ")" Block() "::"
 }
 
 void Constant():
 {}
 {
-  IntegerLiteral()
- |BooleanLiteral()
- |StringLiteral()
- |NullLiteral()
+IntegerLiteral()
+|BooleanLiteral()
+|StringLiteral()
+|NullLiteral()
 }
 
 void ExpressionName():
 {}
 {
-  <NAME>
+<NAME>
 }
 
 
 void IntegerLiteral():
 {}
 {
-  <INTEGER_LITERAL>
+<INTEGER_LITERAL>
 }
 
 void BooleanLiteral():
 {}
 {
-   "true"
-  |"false"
+ "true"
+|"false"
 }
 
 void StringLiteral():
 {}
 {
-  <STRING_LITERAL>
+<STRING_LITERAL>
 }
 
 void NullLiteral():
 {}
 {
-  "null"
+"null"
 }
